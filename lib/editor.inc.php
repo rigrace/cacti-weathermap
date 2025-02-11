@@ -619,7 +619,7 @@ function tidy_links(&$map, $targets, $ignore_tidied=false) {
 }
 
 /**
- * tidy_link - change link offsets so that link is horizonal or vertical, if possible.
+ * tidy_link - change link offsets so that link is horizontal or vertical, if possible.
  *             if not possible, change offsets to the closest facing compass points
  */
 function tidy_link(&$map,$target, $linknumber=1, $linktotal=1, $ignore_tidied=false) {

@@ -144,7 +144,7 @@ function weathermap_repair_maps() {
 
 								$changes++;
 							} else {
-								wm_debug('Background file not found in new location! Attmepting to move.');
+								wm_debug('Background file not found in new location! Attempting to move.');
 
 								if (!is_dir($mydir . 'images/backgrounds')) {
 									$dirgood = mkdir($mydir . 'images/backgrounds');
@@ -272,7 +272,7 @@ function weathermap_run_maps($mydir, $force = false, $maps = array()) {
 	include_once($mydir . '/lib/HTML_ImageMap.class.php');
 	include_once($mydir . '/lib/WeatherMap.class.php');
 
-	// Check and enable boost supprt if it's enabled
+	// Check and enable boost support if it's enabled
 	weathermap_check_set_boost();
 
 	$total_warnings = 0;

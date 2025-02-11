@@ -609,7 +609,7 @@ function moveNode($mapfile, $grid_snap_value) {
 				}
 
 			    if (($link->a->name == $node_name) && ($link->b->name == $node_name)) {
-				    // this is a wierd special case, but it is possible
+				    // this is a weird special case, but it is possible
 				    # $log .= "Special case for node1->node1 links\n";
 				    $dx = $link->a->x - $x;
 				    $dy = $link->a->y - $y;

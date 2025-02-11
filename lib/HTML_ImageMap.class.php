@@ -134,7 +134,7 @@ class HTML_ImageMap_Area_Polygon extends HTML_ImageMap_Area {
 			return false;
 		}
 
-		// Algotithm from from
+		// Algorithm from
 		// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html#The%20C%20Code
 		for ($i = 0, $j = $this->npoints - 1; $i < $this->npoints; $j = $i++) {
 			// print "Checking: $i, $j\n";

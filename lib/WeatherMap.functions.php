@@ -887,7 +887,7 @@ function calc_straight(&$in_xarray, &$in_yarray,$pointsperspan = 12) {
 	$distance = 0;
 
 	for ($i=0; $i < ($npoints -1); $i++) {
-		// still subdivide the straight line, becuase other stuff makes assumptions about
+		// still subdivide the straight line, because other stuff makes assumptions about
 		// how often there is a point - at least find_distance_coords_angle breaks
 		$newdistance = sqrt(pow($xarray[$i+1] - $xarray[$i],2) + pow($yarray[$i+1] - $yarray[$i],2));
 
@@ -986,10 +986,10 @@ function draw_straight($image, &$curvepoints, $widths, $outlinecolour, $fillcolo
 
 	# wm_draw_marker_box($image,$map->selected, $halfway_x, $halfway_y );
 
-	// now we have two seperate spines, with distances, so that the arrowhead is the end of each.
+	// now we have two separate spines, with distances, so that the arrowhead is the end of each.
 	// (or one, if it's unidir)
 
-	// so we can loop along the spine for each one as a seperate entity
+	// so we can loop along the spine for each one as a separate entity
 
 	// we calculate the arrow size up here, so that we can decide on the
 	// minimum length for a link. The arrowheads are the limiting factor.
@@ -2168,7 +2168,7 @@ function TestOutput_RunTest($conffile, $imagefile, $htmlfile, $newconffile, $cov
 	$nwarns = 0;
 
 	if (!strstr($weathermap_version, 'dev')) {
-		# Allow tests to be from the future. Global SET in test file can excempt test from running
+		# Allow tests to be from the future. Global SET in test file can exempt test from running
 		# SET REQUIRES_VERSION 0.98
 		# but don't check if the current version is a dev version
 		$required_version = $map->get_hint('REQUIRES_VERSION');

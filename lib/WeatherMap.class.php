@@ -558,7 +558,7 @@ class WeatherMap extends WeatherMapBase {
 	 * @param  object - An image object
 	 * @param  int      The font number
 	 * @param  int      The lower left corner of where the text will start
-	 * @param  int      The lower left corder of where the test will start
+	 * @param  int      The lower left corner of where the text will start
 	 * @param  string   The string to paint
 	 * @param  hex      The colour to draw the test with
 	 * @param  double   The angle to rotate the text on the image
@@ -577,7 +577,7 @@ class WeatherMap extends WeatherMapBase {
 
 		/**
 		 * When using wimagettftext the x and y coordinates represent the lower left
-		 * corner of the text, where imagestring uses the upper left corener.
+		 * corner of the text, where imagestring uses the upper left corner.
 		 * Big difference.
 		 */
 		$x = intval(round($x));
