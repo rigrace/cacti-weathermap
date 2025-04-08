@@ -3508,9 +3508,16 @@ class WeatherMap extends WeatherMapBase {
 
 		$bgimage = null;
 
+		$this->cachefile_version = false;
 		if ($this->configfile != '') {
-			$this->cachefile_version = crc32(file_get_contents($this->configfile));
-		} else {
+			if (file_exists($this->configfile)) {
+				$this->cachefile_version = crc32(file_get_contents($this->configfile));
+			} else {
+				wm_warn('Failed to find configuration file: ' . $this->configFile);
+			}
+		}
+
+		if (empty($this->cachefile_version)) {
 			$this->cachefile_version = crc32('........');
 		}
 
