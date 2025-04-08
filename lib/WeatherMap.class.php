@@ -3244,7 +3244,10 @@ class WeatherMap extends WeatherMapBase {
 	}
 
 	function WriteConfig($filename) {
-		$fd     = fopen($filename, 'w');
+		$fd     = false;
+		if (is_writable($filename)) {
+			$fd     = @fopen($filename, 'w');
+		}
 		$output = '';
 
 		$weathermap_version = plugin_weathermap_numeric_version();
@@ -3471,14 +3474,13 @@ class WeatherMap extends WeatherMapBase {
 			}
 
 			fwrite($fd, "\n\n# That's All Folks!\n");
-
 			fclose($fd);
+
+			return (true);
 		} else {
 			wm_warn("Couldn't open config file $filename for writing");
 			return (false);
 		}
-
-		return (true);
 	}
 
 	// pre-allocate colour slots for the colours used by the arrows
