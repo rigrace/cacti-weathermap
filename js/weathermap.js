@@ -19,7 +19,7 @@ $(function() {
 			ui.tooltip.css('overflow-y', 'visible');
 
 			ui.tooltip.position({
-				my: 'left top',
+				my: 'left top+5%',
 				at: 'right+15 center',
 				of: event
 			});
