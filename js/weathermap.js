@@ -4,6 +4,7 @@ var wmHoverTimeout = null;
 $(function() {
 	$('map').tooltip({
 		items: 'area',
+		track: false,
 		open: function(event, ui) {
 			if (typeof(event.originalEvent) == 'undefined') {
 				return false;
