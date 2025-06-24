@@ -707,6 +707,27 @@ $weathermap_version = plugin_weathermap_numeric_version();
 							</td>
 						</tr>
 						<tr>
+							<td><?php print __('Key Style', 'weathermap');?></td>
+							<td>
+								<select id='mapstyle_keystyle' name='mapstyle_keystyle' class='ui-state-default ui-corner-all'>
+									<?php
+									$styles = array(
+										'classic'    => __('Classic', 'weathermap'),
+										'horizontal' => __('Horizontal', 'weathermap'),
+										'vertical'   => __('Vertical', 'weathermap'),
+										'inverted'   => __('Inverted', 'weathermap'),
+										'tags'       => __('Tags', 'weathermap')
+									);
+
+
+									foreach($styles as $id => $name) {
+										print "<option value='$id' " . ($map->keystyle['DEFAULT'] == $id ? 'selected':'') . '>' . $name . '</option>';
+									}
+									?>
+								</select>
+							</td>
+						</tr>
+						<tr>
 							<td><?php print __('Legend Font', 'weathermap');?></td>
 							<td><?php print get_fontlist($map, 'mapstyle_legendfont', $map->keyfont);?></td>
 						</tr>

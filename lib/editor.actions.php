@@ -470,7 +470,8 @@ function setMapStyle($mapfile) {
 		$map->htmlstyle = strtolower(get_nfilter_request_var('mapstyle_htmlstyle'));
 	}
 
-	$map->keyfont = get_filter_request_var('mapstyle_legendfont');
+	$map->keyfont             = get_filter_request_var('mapstyle_legendfont');
+	$map->keystyle['DEFAULT'] = get_nfilter_request_var('mapstyle_keystyle');
 
 	$inheritables = array(
 		array('link', 'labelstyle',    'mapstyle_linklabels', ''),
