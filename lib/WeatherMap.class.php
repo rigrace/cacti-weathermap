@@ -3244,10 +3244,11 @@ class WeatherMap extends WeatherMapBase {
 	}
 
 	function WriteConfig($filename) {
+//$rgfd = 
 		$fd     = false;
-		if (is_writable($filename)) {
+		//if (is_writable($filename)) {
 			$fd     = @fopen($filename, 'w');
-		}
+		//}
 		$output = '';
 
 		$weathermap_version = plugin_weathermap_numeric_version();
