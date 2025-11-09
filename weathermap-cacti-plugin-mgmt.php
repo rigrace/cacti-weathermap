@@ -712,7 +712,7 @@ function wm_filter() {
 					</td>
 					<td>
 						<select id='rows' onChange='applyFilter()'>
-							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'weathermap');?></option>
+							<option value='-1'><?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'weathermap');?></option>
 							<?php
 							if (cacti_sizeof($item_rows)) {
 								foreach ($item_rows as $key => $value) {
@@ -1195,7 +1195,7 @@ function addmap_filter() {
 					</td>
 					<td>
 						<select id='rows' name='rows' onChange='applyFilter()'>
-							<option value='-1'<?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'weathermap');?></option>
+							<option value='-1'><?php print (get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'weathermap');?></option>
 							<?php
 							if (cacti_sizeof($item_rows)) {
 								foreach ($item_rows as $key => $value) {
@@ -1829,9 +1829,9 @@ function perms_filter($id) {
 					</td>
 					<td>
 						<select id='type' onChange='applyFilter()'>
-							<option value='-1'<?php print(get_request_var('type') == '-1' ? ' selected>':'>') . __('All', 'weathermap');?></option>
-							<option value='0'<?php print(get_request_var('type') == '0' ? ' selected>':'>') . __('Users', 'weathermap');?></option>
-							<option value='1'<?php print(get_request_var('type') == '1' ? ' selected>':'>') . __('User Groups', 'weathermap');?></option>
+							<option value='-1'><?php print(get_request_var('type') == '-1' ? ' selected>':'>') . __('All', 'weathermap');?></option>
+							<option value='0'><?php print(get_request_var('type') == '0' ? ' selected>':'>') . __('Users', 'weathermap');?></option>
+							<option value='1'><?php print(get_request_var('type') == '1' ? ' selected>':'>') . __('User Groups', 'weathermap');?></option>
 						</select>
 					</td>
 					<td>
@@ -1839,7 +1839,7 @@ function perms_filter($id) {
 					</td>
 					<td>
 						<select id='rows' onChange='applyFilter()'>
-							<option value='-1'<?php print(get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'weathermap');?></option>
+							<option value='-1'><?php print(get_request_var('rows') == '-1' ? ' selected>':'>') . __('Default', 'weathermap');?></option>
 							<?php
 							if (cacti_sizeof($item_rows)) {
 								foreach ($item_rows as $key => $value) {
