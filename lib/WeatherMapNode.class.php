@@ -66,6 +66,13 @@ class WeatherMapNode extends WeatherMapItem {
 	var $max_bandwidth_in, $max_bandwidth_out;
 	var $max_bandwidth_in_cfg, $max_bandwidth_out_cfg;
 	var $labeloffset, $labeloffsetx, $labeloffsety;
+	
+	/* 
+	 * Intended use: Statuss of node, boolean, predefined/userdefined multistate? who knows...
+	 * For now i'm going with 3-state: True, False, Null
+	 * @var bool 
+	 */
+	var $status = null;
 
 	var $inherit_fieldlist;
 
@@ -148,7 +155,8 @@ class WeatherMapNode extends WeatherMapItem {
 			'max_bandwidth_in'      => 100,
 			'max_bandwidth_out'     => 100,
 			'max_bandwidth_in_cfg'  => '100',
-			'max_bandwidth_out_cfg' => '100'
+			'max_bandwidth_out_cfg' => '100',
+		    'status'                => null
 		);
 
 		$this->width    = 0;
@@ -195,8 +203,13 @@ class WeatherMapNode extends WeatherMapItem {
 		$boxheight = 0;
 		$icon_w    = 0;
 		$icon_h    = 0;
+		$status    = null;
 
 		$col = new Colour(-1, -1, -1);
+		
+		
+		
+		
 
 		# print $col->as_string();
 
@@ -976,6 +989,7 @@ class WeatherMapNode extends WeatherMapItem {
 		$js .= 'overliburl:' . js_escape(join(' ',$this->overliburl[IN])) . ', ';
 		$js .= 'overlibwidth:' . $this->overlibheight . ', ';
 		$js .= 'overlibheight:' . $this->overlibwidth . ', ';
+		$js .= 'status:' . $this->status . ', ';
 
 		if (preg_match('/^(none|nink|inpie|outpie|box|rbox|gauge|round)$/', $this->iconfile)) {
 			$js .= 'iconfile:' . js_escape('::' . $this->iconfile);

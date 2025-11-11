@@ -3246,7 +3246,7 @@ class WeatherMap extends WeatherMapBase {
 	function WriteConfig($filename) {
 //$rgfd = 
 		$fd     = false;
-		//if (is_writable($filename)) {
+		//if (is_writable($filename)) {//returns true if file exists already, false is not. This seems unneccesary either way@TODO
 			$fd     = @fopen($filename, 'w');
 		//}
 		$output = '';
