@@ -471,7 +471,7 @@
         function constrainXY(toX, toY, toScale, panOptions) {
             var opts = __assign(__assign({}, options), panOptions);
             var result = { x: x, y: y, opts: opts };
-            if (!opts.force && (opts.disablePan || (opts.panOnlyWhenZoomed === true && scale === opts.startScale))) {
+            if (!opts.force && (opts.disablePan || (opts.panOnlyWhenZoomed && scale === opts.startScale))) {
                 return result;
             }
             toX = parseFloat(toX);
