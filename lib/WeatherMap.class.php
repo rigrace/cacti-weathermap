@@ -3248,6 +3248,13 @@ class WeatherMap extends WeatherMapBase {
 		$fd     = false;
 		//if (is_writable($filename)) {//returns true if file exists already, false is not. This seems unneccesary either way@TODO
 			$fd     = @fopen($filename, 'w');
+// do sql insert/update instead@TODO
+
+
+
+
+
+
 		//}
 		$output = '';
 

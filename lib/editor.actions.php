@@ -771,8 +771,24 @@ function addNode($mapfile, $grid_snap_value) {
 
 	$map->context = 'editor';
 
-	$x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
-	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+	$xRaw = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$yRaw = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+
+  /*Added by github.com/rigrace
+    Should be the scale of the map in decimal
+  */
+  $mapScale = snap(intval(get_nfilter_request_var('mapScale')), $grid_snap_value);
+  $mapPanX = snap(intval(get_nfilter_request_var('mapPanX')), $grid_snap_value);
+  $mapPanY = snap(intval(get_nfilter_request_var('mapPanY')), $grid_snap_value);
+
+
+  
+  /*Correct x & y per the scale (allways storing at full scale (1)*/
+  $x = ( $xRaw / $mapScale );
+  $y = ( $yRaw / $mapScale );
+  /*Correct x & y per the difference in pan*/
+  $x -= $mapPanX;
+  $y -= $mapPanY;
 
 	$map->ReadConfig($mapfile);
 
