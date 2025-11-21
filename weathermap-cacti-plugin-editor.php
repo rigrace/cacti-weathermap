@@ -342,7 +342,7 @@ $weathermap_version = plugin_weathermap_numeric_version();
     			animate: 			true,
     			canvas: 			false,
     			cursor: 			'move',
-    			minScale: 			0.5,	/* zoom out */
+    			minScale: 			1,	/* zoom out */
     			maxScale: 			20,		/* zoom in */
     			startScale: 		1,		/* I don't think this works? */
     			panOnlyWhenZoomed: 	true,
@@ -368,7 +368,7 @@ $weathermap_version = plugin_weathermap_numeric_version();
     		applyRangeZoom = function(rangeElement) { 
     			panzoom.zoom( document.getElementById('weathermap-main-area-pz-range').value);
     		};
-    		pzRange.addEventListener('change', applyRangeZoom ); /* range.value is applied here, need to use jquery to pull value */
+    		pzRange.addEventListener('input', applyRangeZoom ); /* range.value is applied here, need to use jquery to pull value */
     		const bRst = document.getElementById('weathermap-main-area-pz-buttons-reset');
     		bRst.addEventListener('click', panzoom.reset);  /* 'click' is stored as element.onclick */
     		
@@ -408,6 +408,15 @@ $weathermap_version = plugin_weathermap_numeric_version();
 		</ul>
 	</div>
 	<form id='frmMain' action='<?php print $editor_name ?>' method='post'>
+	    
+
+        <div id="weathermap-main-area-pz-buttons">
+          <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
+          <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
+          <input type="range" style="width:300px" id="weathermap-main-area-pz-range" min="1" max="20" step="0.25" value="1"> <!-- range values are applied on document.ready -->
+          <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
+          
+        </div>
     	<div id="weathermap-main-area-pz-parent" style="border: solid 2px black" >
 			<div class='mainArea' id="weathermap-main-area-pz"  >
 				<input id='xycapture'  name='xycapture' data-width='<?php print html_escape($map->width);?>' data-height='<?php print html_escape($map->height);?>'  type='image' src='<?php print html_escape($imageurl);?>' />
@@ -447,14 +456,6 @@ $weathermap_version = plugin_weathermap_numeric_version();
         	  	</div>
 			</div>
 		</div>
-
-        <div id="weathermap-main-area-pz-buttons">
-          <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
-          <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
-          <input type="range" id="weathermap-main-area-pz-range" min="0.5" max="20" step="0.25" value="1"> <!-- range values are applied on document.ready -->
-          <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
-          
-        </div>
 		<!-- Data for overlay and selection -->
 		<div class='scriptData'>
 			<script type='text/javascript'>
