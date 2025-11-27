@@ -362,13 +362,16 @@ $weathermap_version = plugin_weathermap_numeric_version();
     		//buttons
     		const bIn = document.getElementById('weathermap-main-area-pz-buttons-zoom-in');
     		bIn.addEventListener('click', panzoom.zoomIn);  /* 'click' is stored as element.onclick */
+			
     		const bOut = document.getElementById('weathermap-main-area-pz-buttons-zoom-out');
     		bOut.addEventListener('click', panzoom.zoomOut);  /* 'click' is stored as element.onclick */
-    		var pzRange = document.getElementById('weathermap-main-area-pz-range');
-    		applyRangeZoom = function(rangeElement) { 
-    			panzoom.zoom( document.getElementById('weathermap-main-area-pz-range').value);
+			
+			var pzRange = document.getElementById('weathermap-main-area-pz-buttons-range');
+			applyRangeZoom = function(pzRange) {
+				panzoom.zoom( pzRange.target.value);
     		};
     		pzRange.addEventListener('input', applyRangeZoom ); /* range.value is applied here, need to use jquery to pull value */
+    		
     		const bRst = document.getElementById('weathermap-main-area-pz-buttons-reset');
     		bRst.addEventListener('click', panzoom.reset);  /* 'click' is stored as element.onclick */
     		
@@ -379,10 +382,7 @@ $weathermap_version = plugin_weathermap_numeric_version();
           		myPan = panzoom.getPan();
           		$("#mapPanX").val(myPan['x']);
 	    		$("#mapPanY").val(myPan['y']);
-    	  });
-       
-		
-
+    		});
         
        });
      </script>
@@ -413,7 +413,7 @@ $weathermap_version = plugin_weathermap_numeric_version();
         <div id="weathermap-main-area-pz-buttons">
           <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
           <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
-          <input type="range" style="width:300px" id="weathermap-main-area-pz-range" min="1" max="20" step="0.25" value="1"> <!-- range values are applied on document.ready -->
+          <input type="range" style="width:300px" id="weathermap-main-area-pz-buttons-range" min="1" max="20" step="0.25" value="1"> <!-- range values are applied on document.ready -->
           <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
           
         </div>

@@ -4104,8 +4104,9 @@ class WeatherMap extends WeatherMapBase {
 
 		// PreloadMapHTML fills in the ImageMap info, ready for the HTML to be created.
 		$this->PreloadMapHTML();
-
-		$html = '<div class="weathermapimage">' . PHP_EOL;
+        /* @PANZOOM */
+		$html = '<div id="weathermap-main-area-pz-parentx" style="border: solid 2px black" >';/*@PANZOOM*/
+		$html .= '<div class="weathermapimage" id="weathermap-main-area-pz">' . PHP_EOL; /*@PANZOOM*/
 
 		if ($this->imageuri != '') {
 			$html.=sprintf(
@@ -4130,7 +4131,8 @@ class WeatherMap extends WeatherMapBase {
 			$html .= '/></center>' . PHP_EOL;
 		}
 
-		$html .= '</div>' . PHP_EOL;
+		$html .= '</div>';
+		$html .= '</div>' . PHP_EOL;/* @PANZOOM*/
 		$html .= $this->SortedImagemap($imagemapname);
 
 		return ($html);

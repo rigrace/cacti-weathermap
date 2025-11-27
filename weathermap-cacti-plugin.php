@@ -297,6 +297,60 @@ switch (get_request_var('action')) {
 
 		print '<link rel="stylesheet" type="text/css" media="screen" href="' . $config['url_path'] . 'plugins/weathermap/css/weathermap.css"/>';
 		print '<script type="text/javascript" src="' . $config['url_path'] . 'plugins/weathermap/js/weathermap.js"></script> ';
+		print '<script type="text/javascript" src="js/panzoom.js"></script> ';//@PANZOOM
+		
+		?><script type="text/javascript" charset="utf-8"> <!-- @PANZOOM -->
+		$(document).ready(function() {
+             //do startup things here
+            var a = null;
+            /*const*/ pzElement = document.getElementById('weathermap-main-area-pz')
+            panzoom = Panzoom(pzElement, {
+            	//options here
+            	animate: true,
+            	canvas: false,
+            	cursor: 'move',
+            	minScale: 1,
+            	maxScale: 500,
+            	startScale: 1,
+            	canvas: false
+            
+            });
+            
+            //Add button & range event hanlding
+            
+            const parent = pzElement.parentElement;
+            //mouse wheel
+            parent.addEventListener('wheel', panzoom.zoomWithWheel);
+            
+            //buttons
+            const bIn = document.getElementById('weathermap-main-area-pz-buttons-zoom-in');
+            bIn.addEventListener('click', panzoom.zoomIn);  /* 'click' is stored as element.onclick */
+            
+            const bOut = document.getElementById('weathermap-main-area-pz-buttons-zoom-out');
+            bOut.addEventListener('click', panzoom.zoomOut);  /* 'click' is stored as element.onclick */
+            
+            var pzRange = document.getElementById('weathermap-main-area-pz-buttons-range');
+            applyRangeZoom = function(pzRange) {
+            	panzoom.zoom( pzRange.target.value);
+            };
+            pzRange.addEventListener('input', applyRangeZoom ); /* range.value is applied here, need to use jquery to pull value */
+            
+            const bRst = document.getElementById('weathermap-main-area-pz-buttons-reset');
+            bRst.addEventListener('click', panzoom.reset);  /* 'click' is stored as element.onclick */
+			var x = null;
+
+	  });
+
+
+     </script>
+
+        <div id="weathermap-main-area-pz-buttons"> <!-- @PANZOOM -->
+          <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
+          <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
+          <input type="range" id="weathermap-main-area-pz-buttons-range" min="0.01" max="100" step="0.5" value="0.1" defaultValue="0.1">
+          <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
+        
+        </div><?php 
 
 		$id = -1;
 
