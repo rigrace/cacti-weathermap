@@ -149,10 +149,11 @@ class WeatherMapPostProcessor {
 
 // Links, Nodes and the Map object inherit from this class ultimately.
 // Just to make some common code common.
+/* var (<= PHP4)  -> public, private, static (>= PHP 5) - this is running on 8.3, seriously... */
 class WeatherMapBase {
-	var $notes = array();
-	var $hints = array();
-	var $inherit_fieldlist;
+	public $notes = array();
+	public $hints = array();
+	public $inherit_fieldlist;
 
 	function add_note($name,$value) {
 		wm_debug("Adding note $name='$value' to ".$this->name);
@@ -189,24 +190,24 @@ class WeatherMapBase {
 }
 
 class WeatherMapConfigItem {
-	var $defined_in;
-	var $name;
-	var $value;
-	var $type;
+	public $defined_in;
+	public $name;
+	public $value;
+	public $type;
 }
 
 // The 'things on the map' class. More common code (mainly variables, actually)
 class WeatherMapItem extends WeatherMapBase {
-	var $owner;
+	public $owner;
 
-	var $configline;
-	var $infourl;
-	var $overliburl;
-	var $overlibwidth, $overlibheight;
-	var $overlibcaption;
-	var $my_default;
-	var $defined_in;
-	var $config_override;	# used by the editor to allow text-editing
+	public $configline;
+	public $infourl;
+	public $overliburl;
+	public $overlibwidth, $overlibheight;
+	public $overlibcaption;
+	public $my_default;
+	public $defined_in;
+	public $config_override;	# used by the editor to allow text-editing
 
 	function my_type() {
 		return "ITEM";
@@ -214,104 +215,105 @@ class WeatherMapItem extends WeatherMapBase {
 }
 
 class WeatherMap extends WeatherMapBase {
-	var $nodes = array(); // an array of WeatherMapNodes
-	var $links = array(); // an array of WeatherMapLinks
-	var $texts = array(); // an array containing all the extraneous text bits
+  
+	public $nodes = array(); // an array of WeatherMapNodes
+	public $links = array(); // an array of WeatherMapLinks
+	public $texts = array(); // an array containing all the extraneous text bits
 
-	var $used_images  = array(); // an array of image filenames referred to (used by editor)
-	var $seen_zlayers = array(0 => array(), 1000 => array()); // 0 is the background, 1000 is the legends, title, etc
+	public $used_images  = array(); // an array of image filenames referred to (used by editor)
+	public $seen_zlayers = array(0 => array(), 1000 => array()); // 0 is the background, 1000 is the legends, title, etc
 
-	var $config;
-	var $next_id;
-	var $min_ds_time;
-	var $max_ds_time;
-	var $background;
-	var $htmlstyle;
-	var $imap;
-	var $colours;
-	var $configfile;
-	var $imagefile;
-	var $imageuri;
-	var $rrdtool;
-	var $title;
-	var $titlefont;
-	var $kilo;
-	var $sizedebug;
-	var $widthmod;
-	var $debugging;
-	var $linkfont;
-	var $nodefont;
-	var $keyfont;
-	var $timefont;
+	public $config;
+	public $next_id;
+	public $min_ds_time;
+	public $max_ds_time;
+	public $background;
+	public $htmlstyle;
+	public $imap;
+	public $colours;
+	public $configfile;
+	public $imagefile;
+	public $imageuri;
+	public $rrdtool;
+	public $title;
+	public $titlefont;
+	public $kilo;
+	public $sizedebug;
+	public $widthmod;
+	public $debugging;
+	public $linkfont;
+	public $nodefont;
+	public $keyfont;
+	public $timefont;
 
-	// var $bg_r, $bg_g, $bg_b;
-	var $timex;
-	var $timey;
-	var $width;
-	var $height;
-	var $keyx;
-	var $keyy;
-	var $keyimage;
-	var $titlex;
-	var $titley;
-	var $keytext;
-	var $stamptext;
-	var $datestamp;
-	var $min_data_time;
-	var $max_data_time;
-	var $htmloutputfile;
-	var $imageoutputfile;
-	var $dataoutputfile;
-	var $htmlstylesheet;
-	var $defaultlink;
-	var $defaultnode;
-	var $need_size_precalc;
-	var $keystyle;
-	var $keysize;
-	var $rrdtool_check;
-	var $inherit_fieldlist;
-	var $mintimex;
-	var $maxtimex;
-	var $mintimey;
-	var $maxtimey;
-	var $minstamptext;
-	var $maxstamptext;
-	var $context;
-	var $cachefolder;
-	var $mapcache;
-	var $cachefile_version;
-	var $name;
-	var $black;
-	var $white;
-	var $grey;
-	var $selected;
+	// public $bg_r, $bg_g, $bg_b;
+	public $timex;
+	public $timey;
+	public $width;
+	public $height;
+	public $keyx;
+	public $keyy;
+	public $keyimage;
+	public $titlex;
+	public $titley;
+	public $keytext;
+	public $stamptext;
+	public $datestamp;
+	public $min_data_time;
+	public $max_data_time;
+	public $htmloutputfile;
+	public $imageoutputfile;
+	public $dataoutputfile;
+	public $htmlstylesheet;
+	public $defaultlink;
+	public $defaultnode;
+	public $need_size_precalc;
+	public $keystyle;
+	public $keysize;
+	public $rrdtool_check;
+	public $inherit_fieldlist;
+	public $mintimex;
+	public $maxtimex;
+	public $mintimey;
+	public $maxtimey;
+	public $minstamptext;
+	public $maxstamptext;
+	public $context;
+	public $cachefolder;
+	public $mapcache;
+	public $cachefile_version;
+	public $name;
+	public $black;
+	public $white;
+	public $grey;
+	public $selected;
 
-	var $datasourceclasses;
-	var $preprocessclasses;
-	var $postprocessclasses;
-	var $activedatasourceclasses;
-	var $thumb_width;
-	var $thumb_height;
-	var $has_includes;
-	var $has_overlibs;
-	var $node_template_tree;
-	var $link_template_tree;
-    var $dsinfocache = array();
+	public $datasourceclasses;
+	public $preprocessclasses;
+	public $postprocessclasses;
+	public $activedatasourceclasses;
+	public $thumb_width;
+	public $thumb_height;
+	public $has_includes;
+	public $has_overlibs;
+	public $node_template_tree;
+	public $link_template_tree;
+    public $dsinfocache = array();
 
-	var $plugins = array();
-	var $included_files = array();
-	var $usage_stats = array();
-	var $coverage = array();
-    var $colourtable = array();
-    var $warncount = 0;
+	public $plugins = array();
+	public $included_files = array();
+	public $usage_stats = array();
+	public $coverage = array();
+    public $colourtable = array();
+    public $warncount = 0;
 
 	// PHP 8.1 QA
-	var $numscales;
-	var $dumpconfig;
-	var $labelstyle;
-	var $fonts;
-	var $scales;
-	var $image;
+	public $numscales;
+	public $dumpconfig;
+	public $labelstyle;
+	public $fonts;
+	public $scales;
+	public $image;
 
 	function __construct() {
 		$this->inherit_fieldlist = array (
@@ -3246,8 +3248,15 @@ class WeatherMap extends WeatherMapBase {
 	function WriteConfig($filename) {
 //$rgfd = 
 		$fd     = false;
-		//if (is_writable($filename)) {
+		//if (is_writable($filename)) {//returns true if file exists already, false is not. This seems unneccesary either way@TODO
 			$fd     = @fopen($filename, 'w');
+// do sql insert/update instead@TODO
+
+
+
+
+
+
 		//}
 		$output = '';
 
@@ -4095,8 +4104,9 @@ class WeatherMap extends WeatherMapBase {
 
 		// PreloadMapHTML fills in the ImageMap info, ready for the HTML to be created.
 		$this->PreloadMapHTML();
-
-		$html = '<div class="weathermapimage">' . PHP_EOL;
+        /* @PANZOOM */
+		$html = '<div id="weathermap-main-area-pz-parentx" style="border: solid 2px black" >';/*@PANZOOM*/
+		$html .= '<div class="weathermapimage" id="weathermap-main-area-pz">' . PHP_EOL; /*@PANZOOM*/
 
 		if ($this->imageuri != '') {
 			$html.=sprintf(
@@ -4121,7 +4131,8 @@ class WeatherMap extends WeatherMapBase {
 			$html .= '/></center>' . PHP_EOL;
 		}
 
-		$html .= '</div>' . PHP_EOL;
+		$html .= '</div>';
+		$html .= '</div>' . PHP_EOL;/* @PANZOOM*/
 		$html .= $this->SortedImagemap($imagemapname);
 
 		return ($html);

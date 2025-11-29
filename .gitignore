@@ -52,6 +52,10 @@ log/**
 # Ignore Cacti rrd files/folders
 rra/**
 
+.buildpath
+.project
+org.eclipse*
+
 # Ignore Cacti cache files/folders
 cache/**
 *.cache
@@ -107,4 +111,4 @@ configs/*
 
 output/*
 
-
+/*.min.*

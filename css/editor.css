@@ -82,9 +82,9 @@ input {
 	padding: 2px;
 }
 
-#toolbar ul li {
+/*#toolbar ul li {Firefox complained about an empty css filter
 	//display:table;
-}
+}*/
 
 #toolbar ul li.tb_active {
 	float: left;

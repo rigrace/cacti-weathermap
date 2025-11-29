@@ -586,9 +586,20 @@ function moveNode($mapfile, $grid_snap_value) {
 	$map = new WeatherMap;
 
 	$map->context = 'editor';
-
-	$x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
-	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+  
+  /* divert x & y into temporary vars @PANZOOM */
+	$xRaw = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$yRaw = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+  
+  /*Added by github.com/rigrace
+    Should be the scale of the map in decimal
+    @PANZOOM
+   */
+  $mapScale = snap(round(floatval(get_nfilter_request_var('mapScale')), 3), $grid_snap_value);
+  
+  /* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
+  $x = round( ( $xRaw / ( $mapScale * 1 )), 0);
+  $y = round( ( $yRaw / ( $mapScale * 1 )), 0);
 
 	$node_name = wm_editor_sanitize_name(get_nfilter_request_var('node_name'));
 
@@ -771,8 +782,19 @@ function addNode($mapfile, $grid_snap_value) {
 
 	$map->context = 'editor';
 
-	$x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
-	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+  /* Divert x & y into temp vars @PANZOOM */
+	$xRaw = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$yRaw = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+
+  /*Added by github.com/rigrace
+    Should be the scale of the map in decimal
+    @PANZOOM 
+   */
+	$mapScale = snap(round(floatval(get_nfilter_request_var('mapScale')), 3), $grid_snap_value);
+  
+  /* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
+  $x = round( ( $xRaw / ( $mapScale * 1 )), 0);
+  $y = round( ( $yRaw / ( $mapScale * 1 )), 0);
 
 	$map->ReadConfig($mapfile);
 
@@ -873,9 +895,18 @@ function cloneNode($mapfile) {
 		# - but for Clone, we DO want to copy the template too
 		$node->template = $map->nodes[$target]->template;
 
+    /*Added by github.com/rigrace
+      Should be the scale of the map in decimal
+      @PANZOOM 
+     */
+    $mapScale = round(floatval(get_nfilter_request_var('mapScale')), 3);
+    
 		$node->name = $newnodename;
-		$node->x += 30;
-		$node->y += 30;
+		
+    /* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
+    $node->x = round( ( $node->x / ( $mapScale * 1 )), 0) + 30;
+    $node->y = round( ( $node->y / ( $mapScale * 1 )), 0) + 30;  
+
 		$node->defined_in = $mapfile;
 
 		$map->nodes[$newnodename] = $node;
