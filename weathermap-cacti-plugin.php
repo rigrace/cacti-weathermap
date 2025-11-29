@@ -310,7 +310,7 @@ switch (get_request_var('action')) {
             	canvas: false,
             	cursor: 'move',
             	minScale: 1,
-            	maxScale: 500,
+            	maxScale: 20,
             	startScale: 1,
             	canvas: false
             
@@ -338,6 +338,11 @@ switch (get_request_var('action')) {
             const bRst = document.getElementById('weathermap-main-area-pz-buttons-reset');
             bRst.addEventListener('click', panzoom.reset);  /* 'click' is stored as element.onclick */
 			var x = null;
+			
+    		pzElement.addEventListener('panzoomchange', (event) => {
+                // do something                
+                document.getElementById('weathermap-main-area-pz-buttons-range').value = panzoom.getScale();	    		
+    		});
 
 	  });
 

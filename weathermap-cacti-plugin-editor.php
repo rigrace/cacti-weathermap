@@ -342,13 +342,13 @@ $weathermap_version = plugin_weathermap_numeric_version();
     			animate: 			true,
     			canvas: 			false,
     			cursor: 			'move',
-    			minScale: 			1,	/* zoom out */
+    			minScale: 			1,		/* zoom out */
     			maxScale: 			20,		/* zoom in */
     			startScale: 		1,		/* I don't think this works? */
     			panOnlyWhenZoomed: 	true,
           		canvas: 			false,
-          		startX: 			0,	/* - is pan left */
-          		startY: 			0,	/* - is pan down */
+          		startX: 			0,		/* - is pan left */
+          		startY: 			0,		/* - is pan down */
           		step:				0.25
     			
     		});
@@ -374,14 +374,16 @@ $weathermap_version = plugin_weathermap_numeric_version();
     		
     		const bRst = document.getElementById('weathermap-main-area-pz-buttons-reset');
     		bRst.addEventListener('click', panzoom.reset);  /* 'click' is stored as element.onclick */
-    		
+			
     		pzElement.addEventListener('panzoomchange', (event) => {
-    	    	// do something
-          		myScale = panzoom.getScale();
-          		$("#mapScale").val(myScale);
-          		myPan = panzoom.getPan();
-          		$("#mapPanX").val(myPan['x']);
-	    		$("#mapPanY").val(myPan['y']);
+				// do something
+				var myScale = panzoom.getScale();
+				$("#mapScale").val(myScale);
+				myPan = panzoom.getPan();
+				$("#mapPanX").val(myPan['x']);
+				$("#mapPanY").val(myPan['y']);
+				document.getElementById('weathermap-main-area-pz-buttons-range').value = myScale
+	    		
     		});
         
        });
