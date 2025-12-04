@@ -43,58 +43,59 @@
 require_once('HTML_ImageMap.class.php');
 
 class WeatherMapNode extends WeatherMapItem {
-	var $owner;
-	var $id;
-	var $x,	$y;
-	var $original_x, $original_y,$relative_resolved;
-	var $width, $height;
-	var $label, $proclabel, $labelfont;
-	var $labelangle;
-	var $name;
-	var $infourl = array();
-	var $notes;
-	var $colours = array();
-	var $overliburl;
-	var $overlibwidth, $overlibheight;
-	var $overlibcaption = array();
-	var $maphtml;
-	var $selected = 0;
-	var $iconfile, $iconscalew, $iconscaleh;
-	var $targets = array();
-	var $bandwidth_in, $bandwidth_out;
-	var $inpercent, $outpercent;
-	var $max_bandwidth_in, $max_bandwidth_out;
-	var $max_bandwidth_in_cfg, $max_bandwidth_out_cfg;
-	var $labeloffset, $labeloffsetx, $labeloffsety;
+	public $owner;
+	public $id;
+	public $x,	$y;
+	public $original_x, $original_y,$relative_resolved;
+	public $width, $height;
+	public $label, $proclabel, $labelfont;
+	public $labelangle;
+	public $name;
+	public $infourl = array();
+	public $notes;
+	public $colours = array();
+	public $overliburl;
+	public $overlibwidth, $overlibheight;
+	public $overlibcaption = array();
+	public $maphtml;
+	public $selected = 0;
+	public $iconfile, $iconscalew, $iconscaleh;
+	public $targets = array();
+	public $bandwidth_in, $bandwidth_out;
+	public $inpercent, $outpercent;
+	public $max_bandwidth_in, $max_bandwidth_out;
+	public $max_bandwidth_in_cfg, $max_bandwidth_out_cfg;
+	public $labeloffset, $labeloffsetx, $labeloffsety;
+	
+	
+	public $inherit_fieldlist;
 
-	var $inherit_fieldlist;
+	public $labelbgcolour;
+	public $labeloutlinecolour;
+	public $labelfontcolour;
+	public $labelfontshadowcolour;
 
-	var $labelbgcolour;
-	var $labeloutlinecolour;
-	var $labelfontcolour;
-	var $labelfontshadowcolour;
+	public $cachefile;
+	public $usescale;
+	public $useiconscale;
+	public $scaletype, $iconscaletype;
+	public $inscalekey,$outscalekey;
+	public $inscaletag, $outscaletag;
 
-	var $cachefile;
-	var $usescale;
-	var $useiconscale;
-	var $scaletype, $iconscaletype;
-	var $inscalekey,$outscalekey;
-	var $inscaletag, $outscaletag;
-
-	# var $incolour,$outcolour;
-	var $scalevar, $iconscalevar;
-	var $notestext = array();
-	var $image;
-	var $centre_x, $centre_y;
-	var $relative_to;
-	var $zorder;
-	var $template;
-	var $polar;
-	var $boundingboxes=array();
+	# public $incolour,$outcolour;
+	public $scalevar, $iconscalevar;
+	public $notestext = array();
+	public $image;
+	public $centre_x, $centre_y;
+	public $relative_to;
+	public $zorder;
+	public $template;
+	public $polar;
+	public $boundingboxes=array();
 
 	// PHP 8.1. QA
-	var $aiconfillcolour;
-	var $aiconoutlinecolour;
+	public $aiconfillcolour;
+	public $aiconoutlinecolour;
 
 	function __construct() {
 		$this->inherit_fieldlist = array(

@@ -1,7 +1,7 @@
 <?php
 /*
  +-------------------------------------------------------------------------+
- | Copyright (C) 2022-2024 The Cacti Group, Inc.                           |
+ | Copyright (C) 2022-2025 The Cacti Group, Inc.                           |
  |                                                                         |
  | Based on the Original Plugin developed by Howard Jones                  |
  |                                                                         |
@@ -326,8 +326,67 @@ $weathermap_version = plugin_weathermap_numeric_version();
 	<script src='js/editor.js' type='text/javascript'></script>
 	<script src='js/jquery.ddslick.js' type='text/javascript'></script>
 	<script src='js/jquery.ui-contextmenu.js' type='text/javascript'></script>
+	<script src="js/panzoom.js"></script>
 
 	<title><?php print __('PHP Weathermap Editor %s', $weathermap_version, 'flowview');?></title>
+	<script type="text/javascript" charset="utf-8">
+        var panzoom; 
+        var pzElement;	
+		var applyRangeZoom
+		$(document).ready(function() {
+            //do startup things here
+         	var a = null;
+        	/*const*/ pzElement = document.getElementById('weathermap-main-area-pz')
+			panzoom = Panzoom(pzElement, {
+    			//options here
+    			animate: 			true,
+    			canvas: 			false,
+    			cursor: 			'move',
+    			minScale: 			1,	/* zoom out */
+    			maxScale: 			20,		/* zoom in */
+    			startScale: 		1,		/* I don't think this works? Actually, when a event is registered the code in the callback seems to run immediately */
+    			panOnlyWhenZoomed: 	true,
+          		canvas: 			false,
+          		startX: 			0,	/* - is pan left */
+          		startY: 			0,	/* - is pan down */
+          		step:				0.25
+    			
+    		});
+		
+    		//Add button & range event hanlding
+    		
+    		const parent = pzElement.parentElement;
+    		//mouse wheel
+    		parent.addEventListener('wheel', panzoom.zoomWithWheel);
+    		
+    		//buttons
+    		const bIn = document.getElementById('weathermap-main-area-pz-buttons-zoom-in');
+    		bIn.addEventListener('click', panzoom.zoomIn);  /* 'click' is stored as element.onclick */
+			
+    		const bOut = document.getElementById('weathermap-main-area-pz-buttons-zoom-out');
+    		bOut.addEventListener('click', panzoom.zoomOut);  /* 'click' is stored as element.onclick */
+			
+			var pzRange = document.getElementById('weathermap-main-area-pz-buttons-range');
+			applyRangeZoom = function(pzRange) {
+				panzoom.zoom( pzRange.target.value);
+    		};
+    		pzRange.addEventListener('input', applyRangeZoom ); /* range.value is applied here, need to use jquery to pull value */
+    		
+    		const bRst = document.getElementById('weathermap-main-area-pz-buttons-reset');
+    		bRst.addEventListener('click', panzoom.reset);  /* 'click' is stored as element.onclick */
+    		
+    		pzElement.addEventListener('panzoomchange', (event) => {
+    	    	// do something
+          		myScale = panzoom.getScale();
+          		$("#mapScale").val(myScale);
+          		myPan = panzoom.getPan();
+          		$("#mapPanX").val(myPan['x']);
+	    		$("#mapPanY").val(myPan['y']);
+				document.getElementById('weathermap-main-area-pz-buttons-range').value = myScale
+    		});
+        
+       });
+     </script>
 </head>
 
 <body id='mainView' class='mainView'>
@@ -350,40 +409,54 @@ $weathermap_version = plugin_weathermap_numeric_version();
 		</ul>
 	</div>
 	<form id='frmMain' action='<?php print $editor_name ?>' method='post'>
-		<div class='mainArea'>
-			<input id='xycapture' name='xycapture' data-width='<?php print html_escape($map->width);?>' data-height='<?php print html_escape($map->height);?>' style='display:none' type='image' src='<?php print html_escape($imageurl);?>' />
-			<img id='existingdata' name='existingdata' data-width='<?php print html_escape($map->width);?>' data-height='<?php print html_escape($map->height);?>' src='<?php print html_escape($imageurl);?>' usemap='#weathermap_imap' />
-			<input id='x' name='x' type='hidden' />
-			<input id='y' name='y' type='hidden' />
-			<div class='debug' style='display:none'><p><strong><?php print __('Debug', 'weathermap');?></strong>
-				<a href='?action=retidy_all&mapname=<?php print html_escape($mapname);?>'><?php print __('Re-tidy ALL', 'weathermap');?></a>
-				<a href='?action=retidy&mapname=<?php print html_escape($mapname);?>'><?php print __('Re-tidy', 'weathermap');?></a>
-				<a href='?action=untidy&mapname=<?php print html_escape($mapname);?>'><?php print __('Un-tidy', 'weathermap');?></a>
-				<a href='?action=nothing&mapname=<?php print html_escape($mapname);?>'><?php print __('Do Nothing', 'weathermap');?></a>
-				<span>
-					<label for='mapname'><?php print __('mapfile', 'weathermap');?></label>
-					<input id='mapname' name='mapname' type='text' class='ui-state-default ui-corner-all' value='<?php print html_escape($mapname);?>'>
-				</span>
-				<span>
-					<label for='action'><?php print __('action', 'weathermap');?></label>
-					<input id='action' name='action' type='text' class='ui-state-default ui-corner-all' value=''>
-				</span>
-				<span>
-					<label for='param'><?php print __('param', 'weathermap');?></label>
-					<input id='param' name='param' type='text' class='ui-state-default ui-corner-all' value=''>
-				</span>
-				<span>
-					<label for='param2'><?php print __('param2', 'weathermap');?></label>
-					<input id='param2' name='param2' type='text' class='ui-state-default ui-corner-all' value=''>
-				</span>
-				<span>
-					<label for='debug'><?php print __('debug', 'weathermap');?></label>
-					<input id='debug' name='debug' type='text' class='ui-state-default ui-corner-all' value=''>
-				</span>
-				<a target='configwindow' href='?action=show_config&mapname=<?php print urlencode($mapname) ?>'><?php print __('See config', 'weathermap');?></a>
+	    
+
+        <div id="weathermap-main-area-pz-buttons">
+          <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
+          <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
+          <input type="range" style="width:300px" id="weathermap-main-area-pz-buttons-range" min="1" max="20" step="0.25" value="1" defaultValue="1"> <!-- range values are applied on document.ready -->
+          <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
+          
+        </div>
+    	<div id="weathermap-main-area-pz-parent" style="border: solid 2px black" >
+			<div class='mainArea' id="weathermap-main-area-pz"  >
+				<input id='xycapture'  name='xycapture' data-width='<?php print html_escape($map->width);?>' data-height='<?php print html_escape($map->height);?>'  type='image' src='<?php print html_escape($imageurl);?>' />
+				<img id='existingdata' name='existingdata'  data-width='<?php print html_escape($map->width);?>' data-height='<?php print html_escape($map->height);?>' src='<?php print html_escape($imageurl);?>' usemap='#weathermap_imap' />
+        	  	<input id='x' name='x' type='hidden' />
+        	  	<input id='y' name='y' type='hidden' />
+                <input id='mapScale' name='mapScale' type='hidden' />
+                <input id='mapPanX' name='mapPanX' type='hidden' />
+                <input id='mapPanY' name='mapPanY' type='hidden' />
+
+        	  	<div class='debug' style='display:none'><p><strong><?php print __('Debug', 'weathermap');?></strong>
+        	  		<a href='?action=retidy_all&mapname=<?php print html_escape($mapname);?>'><?php print __('Re-tidy ALL', 'weathermap');?></a>
+        	  		<a href='?action=retidy&mapname=<?php print html_escape($mapname);?>'><?php print __('Re-tidy', 'weathermap');?></a>
+        	  		<a href='?action=untidy&mapname=<?php print html_escape($mapname);?>'><?php print __('Un-tidy', 'weathermap');?></a>
+        	  		<a href='?action=nothing&mapname=<?php print html_escape($mapname);?>'><?php print __('Do Nothing', 'weathermap');?></a>
+        	  		<span>
+        	  			<label for='mapname'><?php print __('mapfile', 'weathermap');?></label>
+        	  			<input id='mapname' name='mapname' type='text' class='ui-state-default ui-corner-all' value='<?php print html_escape($mapname);?>'>
+        	  		</span>
+        	  		<span>
+        	  			<label for='action'><?php print __('action', 'weathermap');?></label>
+        	  			<input id='action' name='action' type='text' class='ui-state-default ui-corner-all' value=''>
+        	  		</span>
+        	  		<span>
+        	  			<label for='param'><?php print __('param', 'weathermap');?></label>
+        	  			<input id='param' name='param' type='text' class='ui-state-default ui-corner-all' value=''>
+        	  		</span>
+        	  		<span>
+        	  			<label for='param2'><?php print __('param2', 'weathermap');?></label>
+        	  			<input id='param2' name='param2' type='text' class='ui-state-default ui-corner-all' value=''>
+        	  		</span>
+        	  		<span>
+        	  			<label for='debug'><?php print __('debug', 'weathermap');?></label>
+        	  			<input id='debug' name='debug' type='text' class='ui-state-default ui-corner-all' value=''>
+        	  		</span>
+        	  		<a target='configwindow' href='?action=show_config&mapname=<?php print urlencode($mapname) ?>'><?php print __('See config', 'weathermap');?></a>
+        	  	</div>
 			</div>
 		</div>
-
 		<!-- Data for overlay and selection -->
 		<div class='scriptData'>
 			<script type='text/javascript'>
@@ -418,7 +491,7 @@ $weathermap_version = plugin_weathermap_numeric_version();
 							<td><input id='node_label' name='node_label' type='text' class='ui-state-default ui-corner-all' /></td>
 						</tr>
 						<tr>
-							<td><?php print __('Icon Filename', 'weathermap');?></td>
+							<td></td>
 							<td>
 								<select id='node_iconfilename' name='node_iconfilename'>
 									<?php
