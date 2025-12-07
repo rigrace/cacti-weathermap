@@ -4105,7 +4105,7 @@ class WeatherMap extends WeatherMapBase {
 		// PreloadMapHTML fills in the ImageMap info, ready for the HTML to be created.
 		$this->PreloadMapHTML();
         /* @PANZOOM */
-		$html = '<div id="weathermap-main-area-pz-parentx" style="border: solid 2px black" >';/*@PANZOOM*/
+		$html = '<div id="weathermap-main-area-pz-parent" style="border: solid 2px black" >';/*@PANZOOM*/
 		$html .= '<div class="weathermapimage" id="weathermap-main-area-pz">' . PHP_EOL; /*@PANZOOM*/
 
 		if ($this->imageuri != '') {

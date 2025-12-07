@@ -198,10 +198,6 @@ class WeatherMapNode extends WeatherMapItem {
 		$icon_h    = 0;
 
 		$col = new Colour(-1, -1, -1);
-		
-		
-		
-		
 
 		# print $col->as_string();
 
