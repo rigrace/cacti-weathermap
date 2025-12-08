@@ -1,112 +1,274 @@
-# PHP Network Weathermap 1.0
+##cacti-weathermap
 
-This is PHP Network Weathermap fork, version 1.0.  The PHP Weathermap was
-originally by Howard Jones (howie@thingy.com).  As Howie has scaled back his
-Cacti plugin development work, we will release this version that incorporates
-his core framework from the 0.98 version.  In future releases, we will look
-to incorporate subequent releases of the WeatherMap core.
+Plugin for [cacti](cacti.net)
 
-See the docs sub-directory for full HTML documentation, FAQ and example config.
+This is a port for use with tools, utilities, & libraries I see fit
+- This currently includes: Panzoom
 
-See CHANGELOG.md for the most recent updates, listed by version.
+#There is no expetation that anyone cares
 
-See COPYING for the license under which php-weathermap is released.
+#No warranty expressed or otherwise to the functionality of the code presented here
 
-## Compatibility
+####Last merge of Cacti/plugin_weathermap into cacti-1.2.x_weathermap-develop_rigrace: 2025-12-07
 
-This version only works with Cacti 1.2.x onwards.  A re-write of the user interface
-is being made to make it more compatible with 1.2.x and 1.3.x releases.
+ - functionality not yet verified 
 
-## Contribute
+- [x] Shoe-horn of [Panzoom](https://www.jqueryscript.net/zoom/jQuery-Plugin-For-Panning-Zooming-Any-Elements-panzoom.html#google_vignette) project into map edit & display flows is functional
 
-Check out the main [Cacti](http://www.cacti.net) web site for downloads, change
-logs, release notes and more!
+- [ ] Cleanup of class variables, and thinking about how to OO the code
 
-## Community forums
+- [ ] Convert the use of OS files as the method of storage for map, node, & link data/configurations to tables
 
-Given the large scope of Cacti, the forums tend to generate a respectable amount
-of traffic. Doing your part in answering basic questions goes a long way since
-we cannot be everywhere at once. Contribute to the Cacti community by
-participating on the [Cacti Community Forums](http://forums.cacti.net).
+-------------------------
 
-For Network Weathermap's core support, there is much more information along with
-tutorials and updates available at Howard Jone's site:
+##my installation steps:
 
-    http://www.network-weathermap.com/
 
-## Important Notes
+Install & configure Cacti 1.2.30 on ubuntu 24.04
+referenced:
+- https://docs.cacti.net/Installing-Under-Ubuntu-Debian.md
+- https://github.com/Cacti/documentation/blob/develop/Installing-Under-Ubuntu-Debian.md
+- https://zacs-tech.com/how-to-install-cacti-network-monitoring-tool-on-ubuntu-24-04-22-04/
+- https://idroot.us/install-cacti-ubuntu-24-04/
 
-This version of Weathermap only works with Cacti 1.2.x and above only.
-beta, yet non-production use at this time.
+Set /etc/hostname & /etc/hosts
+-------------------
+Update os & install base required applications
+preperation: updates & upgrades (per your discression)
 
-The location of backgrounds and object images has changed!  The upgrade script 
-will attempt to move these backgrounds and images to the new locations, 
-but you may have some cleanup to do especially if you customized the locations.
+```bash
+sudo apt update
+sudo apt upgrade
+sudo apt install -y apache2 rrdtool mariadb-server snmp snmpd php php-mysql php-curl php-intl php-mcrypt php-rrd php-snmp php-xml php-mbstring php-json php-gd php-gmp php-zip php-ldap php-intl   
+#OPTIONALLY add libapache2-mod-php php-xdebug php-cli
+```
+Add/enable aditional apache modules
+```bash
+sudo a2enmod rewrite 
+```
+Clone cacti base application to local folder & push it into /var/www/html/(cacti)
+CHANGE TO 1.2.x branch
+```bash
+mkdir -p ~/Documents/cacti
 
-WARNING: Before upgrading make ensure the poller account can move config file
-images into into the plugins various images directories.  Fail to do so 
-may result in corrupted config files.
+git clone -b 1.2.x https://github.com/Cacti/cacti.git ~/Documents/cacti
+```
+#configure cacti:
+```bash
+cp ~/Documents/cacti/include/config.php.dist ~/Documents/cacti/include/config.php
+vim ~/Documents/cacti/include/config.php
+  - set mysql connection credentials
 
-NOTE: The directories: `cacti-resources` and `editor-resources` have been removed
-in favor of the standard `js` and `css` folders.  You should remove these
-folders after installation.
+vim ~/Documents/cacti/.htaccess
+  php_value include_path ".:/var/www/html/cacti"
+  php_value display_errors "on"
+  php_value error_log "/var/www/html/cacti/log/cacti-php-error.log"
 
-WARNING: Since previously the WeatherMap Editor had essentially no security, 
-this version will be 100% dependent on the Cacti Security model to authorize users.
+sudo cp -R ~/Documents/cacti /var/www/html
+```
+Cacti seems to require x perm for www-data
+```bash
+sudo chown -R www-data:www-data /var/www/html/cacti
 
-NOTE: The Overlib library dependency has been removed in this release.
+sudo chmod -R 770 /var/www/html/cacti
+```
+-----------------
+Using port 80/443 for /var/www/html/cacti
+Use another port such as 81 as SSL for workspace or alternate /var/www/html vhosts
+set listening ports - for example:
+http w/ port 81
+```bash
+sudo vim /etc/apache2/ports.conf
+Listen 81
+```
+https w/ 81 (for alternate vhost, I usually save 443 for /var/www/html vhosts)
+```VIM
+<IfModule ssl_module>
+	Listen 81
+</IfModule>
 
-When reviewing the plugin in detail, there were so many possible enhancements
-that could be incorporated into the tool, but for now, it's really just to
-bring the Weathermap plugin fully into the Cacti 1.x and beyond.
+sudo vim /etc/apache2/sites-available/cactiV.conf:
+<VirtualHost *:80>
+   ServerName cacti
+   #ServerAlias www.cacti
+   ServerAdmin no@email.com
+   DocumentRoot /var/www/html
+   DirectoryIndex index.php
+   <Directory /var/www/html/cacti>
+     Options Indexes FollowSymLinks
+     AllowOverride All
+     Require all granted
+   </Directory>
+   
+       LogLevel warn
+       ErrorLog ${APACHE_LOG_DIR}/cacti_error.log
+       CustomLog ${APACHE_LOG_DIR}/cacti_access.log combined
+   
+   
+   
+</VirtualHost>
+[exit saving changes]
+```
+configure /var/www/html folder in :
+```BASH
+vim /etc/apache2/apache2.conf
+[replace directory block for /var/www/html w/]
+	
+  	Options FollowSymLinks
+	AllowOverride None
+	Require all granted
+	#Redirect 403 /cacti/index.php
+[exit saving changes]
+```
+remove default vhost & add cactivhost
+```BASH
+sudo a2dissite 000-default.conf
+sudo a2ensite cactiV.conf
+```
 
-## GitHub Documentation
+----------------
+```bash
+basic mysql setup
+sudo mysql -u root (actually using mariadb)
+```
+once in mariadb
+```SQL
+CREATE DATABASE cacti DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
+CREATE DATABASE test;
+[create view to show mysql/mariadb user status]
+create view test.musers_view as SELECT host, User, Select_priv, Insert_priv, Update_priv, Delete_priv, Execute_priv, Show_db_priv, ssl_type, grant_priv, ssl_cipher, x509_issuer, x509_subject FROM mysql.user;
+select * from test.musers_view;
 
-Get involved in creating and editing Cacti Documentation!  Fork, change and
-submit a pull request to help improve the documentation on
-[GitHub](https://github.com/cacti/documentation).
+[create cactiuser for accessing database from cacti application, phpmyadmin if installed]
+create user 'cactiuser'@'localhost' IDENTIFIED BY 'some_password';
+alter user 'cactiuser'@'localhost' IDENTIFIED BY 'some_password'; [example of setting password after user is created]
+GRANT ALL PRIVILEGES ON cacti.* TO 'cactiuser'@'localhost';
+GRANT SELECT ON mysql.time_zone_name TO 'cactiuser'@'localhost'; [to be filled below]
 
-## GitHub Development
 
-Get involved in development of Cacti! Join the developers and community on
-[GitHub](https://github.com/cacti)!
+[create admin for accessing database from cacti application, phpmyadmin if installed]
+create user 'admin'@'localhost' identified by 'some_password';
+grant all privileges on *.* to 'admin'@'localhost';
+grant grant option on *.* to 'admin'@'localhost';
 
-## Original Weathermap Plugin
+[set cacti's admin password]
+use cacti;
+update `user_auth` set password = md5('123456') where username = 'admin';
+[cacti will prompt to change password]
 
-Howard Jones original work can still be found on GitHub at the following location.
+FLUSH PRIVILEGES;
+quit
+```
 
-https://github.com/howardjones/network-weathermap
+run cacti database script to create cacti's database objects
+```BASH
+mysql -u cactiuser -p cacti < ~/Documents/cacti/cacti.sql
+```
+Load mysql timezones
+```BASH
+mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u allowed_user -p mysql
+```
+------------------
+Install phpmyadmin if not already
+```BASH
+sudo apt install phpmyadmin
 
-Howie has done extensive rework of his Weathermap API that we will look to incorporate
-in future releases of the Cacti version of the plugin.
+[using apache]
+[answer no to db-config prompt]
 
-## Included 3rd Party Component Software
 
-* ddSlick - A forked and jQueryUI compatible version of the jquery images dropdown
-  plugin.
+./ApacheRestart.sh
+./MySQLRestart.sh
+```
+Run cacti initialization  by starting http://localhost/cacti
 
-  See: https://jquery-plugins.net/ddslick-dropdown-with-images
+- hit page localhost/cacti in browser
+- follow prompts
+  - Some mysql settings can't be set when the service is up (read on reload)
+sudo vim /etc/mysql/my.cnf # and add them there
+[mysql] #section for mysql proper
 
-* Network-Icons-SVG - A collection of network icons in SVG format converted
-  to work with Weathermaps PNG format.
+[mariadb] section for the one used here
 
-  See: https://github.com/aci686/Network-Icons-SVG
+------
 
-* The Bitstream Vera Open Source fonts (Vera\*.ttf) are copyright Bitstream, Inc.
+```bash
+sudo chown -R www-data:www-data /usr/share/cacti/site/resource/snmp_queries/
+sudo chown -R www-data:www-data /usr/share/cacti/site/resource/script_server/
+sudo chown -R www-data:www-data /usr/share/cacti/site/resource/script_queries/
+sudo chown -R www-data:www-data /usr/share/cacti/site/scripts/
+```
 
-  See: http://www.bitstream.com/font_rendering/products/dev_fonts/vera.html
+-----------------
+Setup poller actuation
+1. quick & dirty cron method
+	```bash	crontab -e ```
+	#Add 5 minute interval call to poller
+	```vim 
+	*/5 * * * * www-data php /var/www/html/cacti/poller.php &>/dev/null
+	```
+2. Slightly more involved service base method
+	```bash
+	sudo vim /var/www/html/cacti/service/cactid.service
+	```
+	# Set 'User' & 'Group' to www-data
+        
+    create cacti environment file
+    ```bash
+	sudo mkdir -p /etc/sysconfig
+	sudo touch /etc/sysconfig/cactid
+	```bash
+	sudo cp -p /var/www/html/cacti/service/cactid.service /etc/systemd/system
+	
+	sudo chown root:root /etc/systemd/system/cactid.service
+	
 
-* The manual uses the Kube CSS Framework and ParaType's PT Sans font.
+	sudo sudo systemctl daemon-reload
+	sudo systemctl enable cactid
+	sudo systemctl restart cactid
+    sudo systemctl status cactid
+	```
+----------------------------------
 
-  See: http://imperavi.com/kube/
-  See: http://www.fontsquirrel.com/fonts/PT-Sans
+ADDING WEATHERMAP
+#get code from source from:
+- cloned git source
+  - change to consumable branch using git
+- downloaded zip file
+  - extract to folder
+- copy weathermap folder into .../vhost_folder/plugins folder
+```bash
+cp .../path_to_source/weathermap .../var/www/html/cacti/plugins/
+``` 
+- set vhost folder permissions
+  - for var/www/html/cacti I use:
+    ```bash
+    sudo chown -R www-data:www-data /var/www/html
+    sudo chmod -R 0770 /var/www/html
+    ```
+- enable weathermap plugin 
+  http://localhost/cacti
+  browse to console - configuration - plugins
+  install the plugin
+  enable the plugin
+Input Validation Whitelist Protection
 
-* Some of the icons used in the editor, and also supplied in the images/ folder are
-  from the excellent Fam Fam Fam Silk Icon collection by Mark James released under
-  a Creative Commons license.
+<h1>This is a claenup note</h1>
+Cacti Data Input methods that call a script can be exploited in ways that a non-administrator can perform damage to either files owned by the poller account, and in cases where someone runs the Cacti poller as root, can compromise the operating system allowing attackers to exploit your infrastructure.
 
-  See: http://www.famfamfam.com/lab/icons/silk/.
-  See: http://creativecommons.org/licenses/by/2.5/
+Therefore, several versions ago, Cacti was enhanced to provide Whitelist capabilities on the these types of Data Input Methods. Though this does secure Cacti more thoroughly, it does increase the amount of work required by the Cacti administrator to import and manage Templates and Packages.
 
------------------------------------------------------------------------------
-Copyright (c) 2004-2024 - The Cacti Group, Inc.
+The way that the Whitelisting works is that when you first import a Data Input Method, or you re-import a Data Input Method, and the script and or arguments change in any way, the Data Input Method, and all the corresponding Data Sources will be immediatly disabled until the administrator validates that the Data Input Method is valid.
+
+To make identifying Data Input Methods in this state, we have provided a validation script in Cacti's CLI directory that can be run with the following options:
+
+    php -q input_whitelist.php --audit - This script option will search for any Data Input Methods that are currently banned and provide details as to why.
+    php -q input_whitelist.php --update - This script option un-ban the Data Input Methods that are currently banned.
+    php -q input_whitelist.php --push - This script option will re-enable any disabled Data Sources.
+
+It is strongly suggested that you update your config.php to enable this feature by uncommenting the $input_whitelist variable and then running the three CLI script options above after the web based install has completed.
+
+Check the Checkbox below to acknowledge that you have read and understand this security concern
+
+
+
