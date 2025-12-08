@@ -1,15 +1,15 @@
-##cacti-weathermap
+## cacti-weathermap
 
 Plugin for [cacti](cacti.net)
 
 This is a port for use with tools, utilities, & libraries I see fit
 - This currently includes: Panzoom
 
-#There is no expetation that anyone cares
+# There is no expetation that anyone cares
 
-#No warranty expressed or otherwise to the functionality of the code presented here
+# No warranty expressed or otherwise to the functionality of the code presented here
 
-####Last merge of Cacti/plugin_weathermap into cacti-1.2.x_weathermap-develop_rigrace: 2025-12-07
+Last merge of Cacti/plugin_weathermap develop into cacti-1.2.x_weathermap-develop_rigrace: **2025-12-07**
 
  - functionality not yet verified 
 
@@ -21,7 +21,7 @@ This is a port for use with tools, utilities, & libraries I see fit
 
 -------------------------
 
-##my installation steps:
+## my installation steps:
 
 
 Install & configure Cacti 1.2.30 on ubuntu 24.04
@@ -53,7 +53,7 @@ mkdir -p ~/Documents/cacti
 
 git clone -b 1.2.x https://github.com/Cacti/cacti.git ~/Documents/cacti
 ```
-#configure cacti:
+configure cacti:
 ```bash
 cp ~/Documents/cacti/include/config.php.dist ~/Documents/cacti/include/config.php
 vim ~/Documents/cacti/include/config.php
