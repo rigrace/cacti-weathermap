@@ -5,7 +5,7 @@ Plugin for [cacti](cacti.net)
 This is a port for use with tools, utilities, & libraries I see fit
 - This currently includes: Panzoom
 
-# There is no expetation that anyone cares
+# There is no expectation that anyone cares
 
 # No warranty expressed or otherwise to the functionality of the code presented here
 
@@ -37,39 +37,50 @@ Update os & install base required applications
 preperation: updates & upgrades (per your discression)
 
 ```bash
+#Setup basic utilities
+sudo apt install libfuse2t64 lldpad vim gzip parted git tree curl cifs-utils openssh-client openssh-server acl net-tools synaptic gparted synaptic gnome-system-monitor smbclient
+
+#setup secure ssh connections now
+
+#Using sftp copy files/scripts over 
+remote
+
+Set /etc/hostname & /etc/hosts
+-------------------
+#Update os & install base required applications
 sudo apt update
 sudo apt upgrade
-sudo apt install -y apache2 rrdtool mariadb-server snmp snmpd php php-mysql php-curl php-intl php-mcrypt php-rrd php-snmp php-xml php-mbstring php-json php-gd php-gmp php-zip php-ldap php-intl   
-#OPTIONALLY add libapache2-mod-php php-xdebug php-cli
+
+#start installing Cacti support 
+sudo apt install -y apache2 rrdtool mariadb-server snmp snmpd php php-mysql php-curl php-intl php-mcrypt php-rrd php-snmp php-xml php-mbstring php-json php-gd php-gmp php-zip php-ldap php-intl libapache2-mod-php php-xdebug php-cli 
 ```
 Add/enable aditional apache modules
 ```bash
 sudo a2enmod rewrite 
 ```
-Clone cacti base application to local folder & push it into /var/www/html/(cacti)
+#Clone cacti base application to local folder & push it into /var/www/html/(cacti)
+
+
+mkdir -p ~/Documents/cacti
 CHANGE TO 1.2.x branch
 ```bash
 mkdir -p ~/Documents/cacti
 
 git clone -b 1.2.x https://github.com/Cacti/cacti.git ~/Documents/cacti
+#CHANGE TO 1.2.x branch
 ```
-configure cacti:
+Start configure cacti:
 ```bash
 cp ~/Documents/cacti/include/config.php.dist ~/Documents/cacti/include/config.php
 vim ~/Documents/cacti/include/config.php
   - set mysql connection credentials
 
-vim ~/Documents/cacti/.htaccess
-  php_value include_path ".:/var/www/html/cacti"
-  php_value display_errors "on"
-  php_value error_log "/var/www/html/cacti/log/cacti-php-error.log"
-
 sudo cp -R ~/Documents/cacti /var/www/html
 ```
-Cacti seems to require x perm for www-data
-```bash
-sudo chown -R www-data:www-data /var/www/html/cacti
 
+```bash
+#Set file permissions for apache:
+sudo chown -R www-data:www-data /var/www/html/cacti
 sudo chmod -R 770 /var/www/html/cacti
 ```
 -----------------
@@ -86,8 +97,11 @@ https w/ 81 (for alternate vhost, I usually save 443 for /var/www/html vhosts)
 <IfModule ssl_module>
 	Listen 81
 </IfModule>
-
+```
+```bash
 sudo vim /etc/apache2/sites-available/cactiV.conf:
+```
+```vim
 <VirtualHost *:80>
    ServerName cacti
    #ServerAlias www.cacti
@@ -95,9 +109,10 @@ sudo vim /etc/apache2/sites-available/cactiV.conf:
    DocumentRoot /var/www/html
    DirectoryIndex index.php
    <Directory /var/www/html/cacti>
-     Options Indexes FollowSymLinks
-     AllowOverride All
-     Require all granted
+     Options FollowSymLinks
+     AllowOverride None
+	 Require all granted
+	 #Redirect 403 /cacti/index.php
    </Directory>
    
        LogLevel warn
@@ -109,19 +124,9 @@ sudo vim /etc/apache2/sites-available/cactiV.conf:
 </VirtualHost>
 [exit saving changes]
 ```
-configure /var/www/html folder in :
-```BASH
-vim /etc/apache2/apache2.conf
-[replace directory block for /var/www/html w/]
-	
-  	Options FollowSymLinks
-	AllowOverride None
-	Require all granted
-	#Redirect 403 /cacti/index.php
-[exit saving changes]
-```
-remove default vhost & add cactivhost
-```BASH
+
+remove default vhosts & add cactivhost
+```bash
 sudo a2dissite 000-default.conf
 sudo a2ensite cactiV.conf
 ```
@@ -135,22 +140,28 @@ once in mariadb
 ```SQL
 CREATE DATABASE cacti DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ;
 CREATE DATABASE test;
-[create view to show mysql/mariadb user status]
+[create view to show mysql user status]
 create view test.musers_view as SELECT host, User, Select_priv, Insert_priv, Update_priv, Delete_priv, Execute_priv, Show_db_priv, ssl_type, grant_priv, ssl_cipher, x509_issuer, x509_subject FROM mysql.user;
 select * from test.musers_view;
 
 [create cactiuser for accessing database from cacti application, phpmyadmin if installed]
 create user 'cactiuser'@'localhost' IDENTIFIED BY 'some_password';
 alter user 'cactiuser'@'localhost' IDENTIFIED BY 'some_password'; [example of setting password after user is created]
-GRANT ALL PRIVILEGES ON cacti.* TO 'cactiuser'@'localhost';
+GRANT ALL PRIVILEGES ON cacti.* TO 'cactiuser'@'localhost'; [SUID will not suffice as cacti creates database objects during at least the install]
 GRANT SELECT ON mysql.time_zone_name TO 'cactiuser'@'localhost'; [to be filled below]
-
 
 [create admin for accessing database from cacti application, phpmyadmin if installed]
 create user 'admin'@'localhost' identified by 'some_password';
 grant all privileges on *.* to 'admin'@'localhost';
 grant grant option on *.* to 'admin'@'localhost';
 
+```
+
+run cacti database script to create cacti's database objects
+```BASH
+mysql -u cactiuser -p cacti < ~/Documents/cacti/cacti.sql
+```
+```mysql
 [set cacti's admin password]
 use cacti;
 update `user_auth` set password = md5('123456') where username = 'admin';
@@ -160,10 +171,6 @@ FLUSH PRIVILEGES;
 quit
 ```
 
-run cacti database script to create cacti's database objects
-```BASH
-mysql -u cactiuser -p cacti < ~/Documents/cacti/cacti.sql
-```
 Load mysql timezones
 ```BASH
 mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u allowed_user -p mysql
