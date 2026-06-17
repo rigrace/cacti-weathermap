@@ -883,7 +883,10 @@ function cloneNode($mapfile) {
 		$newnodename = $target;
 
 		do {
-			$newnodename = $newnodename . '_copy';
+		    //               PHP8.3+
+		    //check for _, - and strip them out, then increrment
+		    
+		    $newnodename = str_increment(str_ireplace('_', '',$newnodename));
 		} while(isset($map->nodes[$newnodename]));
 
 		$node = new WeatherMapNode;
