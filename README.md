@@ -1,5 +1,7 @@
 # PHP Network Weathermap 1.0
 
+# This is the working copy, NOT FOR INSTALLATION #
+
 This is PHP Network Weathermap fork, version 1.0.  The PHP Weathermap was
 originally by Howard Jones (howie@thingy.com).  As Howie has scaled back his
 Cacti plugin development work, we will release this version that incorporates
