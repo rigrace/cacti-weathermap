@@ -883,10 +883,14 @@ function cloneNode($mapfile) {
 		$newnodename = $target;
 
 		do {
-		    //               PHP8.3+
 		    //check for _, - and strip them out, then increrment
-		    
-		    $newnodename = str_increment(str_ireplace('_', '',$newnodename));
+		    $_highestNodeName = end($map->nodes)->name;
+		    if (empty($_highestNodeName)) {
+		        $_highestNodeName = 'node00000';
+		    }
+		    //Please no more _copy_copy_copy.....
+		    //str_increment requires PHP8.3+ 
+		    $newnodename = str_increment(str_ireplace('_', '',$_highestNodeName));
 		} while(isset($map->nodes[$newnodename]));
 
 		$node = new WeatherMapNode;

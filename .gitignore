@@ -112,3 +112,6 @@ configs/*
 output/*
 
 /*.min.*
+
+/configs/*.conf
+
