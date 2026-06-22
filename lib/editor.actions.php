@@ -867,53 +867,62 @@ function deleteNode($mapfile) {
 	}
 }
 
-function cloneNode($mapfile) {
-	$map = new WeatherMap;
-
-	$map->context = 'editor';
-
-	$map->ReadConfig($mapfile);
-
-	$target = wm_editor_sanitize_name(get_nfilter_request_var('param'));
-
-	if (isset($map->nodes[$target])) {
-		$log = 'clone node ' . $target;
-
-		$newnodename = $target;
-
-		do {
-			$newnodename = $newnodename . '_copy';
-		} while(isset($map->nodes[$newnodename]));
-
-		$node = new WeatherMapNode;
-
-		$node->Reset($map);
-		$node->CopyFrom($map->nodes[$target]);
-
-		# CopyFrom skips this one, because it's also the function used by template inheritance
-		# - but for Clone, we DO want to copy the template too
-		$node->template = $map->nodes[$target]->template;
-
-    /*Added by github.com/rigrace
-      Should be the scale of the map in decimal
-      @PANZOOM 
-     */
-    $mapScale = round(floatval(get_nfilter_request_var('mapScale')), 3);
+/**
+ * @desc Currently supports nodes, written to add others later
+ * @param WeatherMap $map
+ * @param string 'node', 'link' (singular)
+ * @return string
+ */
+function getNewTypeName($map, $type) {
+    //check for _, and strip them out, then increment
+    $_highestNodeName = max(array_keys($map->{$type . 's'}));
+    if (empty($_highestNodeName)) {
+        $_highestNodeName = $type . '00000';
+    }
+    //Please no more something_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy_copy.....
+    //str_increment requires PHP8.3+
+    $newnodename = str_increment(str_ireplace('_', '',$_highestNodeName));
+    return $newnodename;
     
-		$node->name = $newnodename;
-		
-    /* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
-    $node->x = round( ( $node->x / ( $mapScale * 1 )), 0) + 30;
-    $node->y = round( ( $node->y / ( $mapScale * 1 )), 0) + 30;  
+}
 
-		$node->defined_in = $mapfile;
-
-		$map->nodes[$newnodename] = $node;
-
-		array_push($map->seen_zlayers[$node->zorder], $node);
-
-		$map->WriteConfig($mapfile);
-	}
+function cloneNode($mapfile) {
+    $map = new WeatherMap;
+    
+    $map->context = 'editor';
+    
+    $map->ReadConfig($mapfile);
+    
+    $target = wm_editor_sanitize_name(get_nfilter_request_var('param'));
+    
+    if (isset($map->nodes[$target])) {
+        $log = 'clone node ' . $target;
+        
+        $newnodename = getNewTypeName($map, 'node');
+        
+        $node = new WeatherMapNode;
+        
+        $node->Reset($map);
+        $node->CopyFrom($map->nodes[$target]);
+        
+        # CopyFrom skips this one, because it's also the function used by template inheritance
+        # - but for Clone, we DO want to copy the template too
+        $node->template = $map->nodes[$target]->template;
+        
+        $node->name = $newnodename;
+        
+        $node->x = round( $node->x + 30);
+        $node->y = round( $node->y + 30);
+        
+        
+        $node->defined_in = $mapfile;
+        
+        $map->nodes[$newnodename] = $node;
+        
+        array_push($map->seen_zlayers[$node->zorder], $node);
+        
+        $map->WriteConfig($mapfile);
+    }
 }
 
 function displayFontSamples($mapfile) {
