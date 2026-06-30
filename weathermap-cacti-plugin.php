@@ -352,7 +352,7 @@ switch (get_request_var('action')) {
         <div id="weathermap-main-area-pz-buttons"> <!-- @PANZOOM -->
           <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
           <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
-          <input type="range" id="weathermap-main-area-pz-buttons-range" min="0.01" max="100" step="0.5" value="0.1" defaultValue="0.1">
+          <input type="range" id="weathermap-main-area-pz-buttons-range" min="1" max="20" step="0.25" value="1" defaultValue="1">
           <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
         
         </div><?php 

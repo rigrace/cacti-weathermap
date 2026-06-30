@@ -415,7 +415,7 @@ $weathermap_version = plugin_weathermap_numeric_version();
         <div id="weathermap-main-area-pz-buttons">
           <button id="weathermap-main-area-pz-buttons-zoom-in">Zoom In</button>
           <button id="weathermap-main-area-pz-buttons-zoom-out">Zoom Out</button>
-          <input type="range" style="width:300px" id="weathermap-main-area-pz-buttons-range" min="1" max="20" step="0.25" value="1"> <!-- range values are applied on document.ready -->
+          <input type="range" style="width:300px" id="weathermap-main-area-pz-buttons-range" min="1" max="20" step="0.25" value="1" defaultValue="1"> <!-- range values are applied on document.ready -->
           <button id="weathermap-main-area-pz-buttons-reset">Reset</button>
           
         </div>
