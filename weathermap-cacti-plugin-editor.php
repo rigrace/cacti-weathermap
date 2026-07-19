@@ -591,7 +591,8 @@ $weathermap_version = plugin_weathermap_numeric_version();
 						<tr>
 							<td>Maximum Bandwidth<br /> Out of '<span id='link_nodename1b'>%NODE1%</span>'</td>
 							<td>
-								<input id='link_bandwidth_out_cb' name='link_bandwidth_out_cb' type='checkbox' value='symmetric' />Same As 'In' or <input id='link_bandwidth_out' name='link_bandwidth_out' type='text' class='ui-state-default ui-corner-all' size='8' /> bits/sec</td>
+								<input id='link_bandwidth_out_cb' name='link_bandwidth_out_cb' type='checkbox' value='symmetric' />Same As 'In' or <input id='link_bandwidth_out' name='link_bandwidth_out' type='text' class='ui-state-default ui-corner-all' size='8' /> bits/sec
+						    </td>
 						</tr>
 						<tr>
 							<td><?php print __('Data Source(s)', 'weathermap');?></td>
@@ -602,7 +603,10 @@ $weathermap_version = plugin_weathermap_numeric_version();
 						<tr>
 							<td><?php print __('Data Source Selector', 'weathermap');?></td>
 							<td>
-								<input id='link_target_picker' name='link_target_picker' type='text' class='selectmenu-ajax ui-state-default ui-corner-all' data-action='datasources' />
+								<span>
+									<input id='link_target_picker' name='link_target_picker' type='text' class='selectmenu-ajax ui-state-default ui-corner-all' data-action='datasources' />
+									<input id='link_target_picker_addtype' name='link_target_picker_addtype' type='checkbox' value='symmetric' checked='checked'/>Up/Dn
+								</span>
 							</td>
 						</tr>
 						<tr>

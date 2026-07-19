@@ -182,9 +182,12 @@ function graphPicker() {
 			if (id == 'link_target_picker') {
 				var target = $('#' + id).val();
 				var existing = $('#link_target').val();
-
-				$('#link_target').val(existing + (existing != '' ? ' ':'') + target);
-
+				if( $('#link_target_picker_addtype').is(':checked')) {
+					$('#link_target').val('gauge:' + existing + (existing != '' ? ' ':'') + target + ':int_status:int_status');
+				} else {
+					$('#link_target').val(link_target_picker_addtype_prefix + ':' + existing + (existing != '' ? ' ':'') + target + link_target_picker_addtype_suffix);
+				}
+				
 				// Add the graph hovers if possible
 				var ehover = $('#link_hover').val();
 				var einfo  = $('#link_infourl').val();
