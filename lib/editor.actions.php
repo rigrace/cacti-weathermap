@@ -535,8 +535,21 @@ function placeLegend($mapfile, $grid_snap_value) {
 
 	$map->context = 'editor';
 
-	$x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
-	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+	/* $x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value); */
+	/* Divert x & y into temp vars @PANZOOM */
+	$xRaw = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$yRaw = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+	
+	/*Added by github.com/rigrace
+	 Should be the scale of the map in decimal
+	 @PANZOOM
+	 */
+	$mapScale = snap(round(floatval(get_nfilter_request_var('mapScale')), 3), $grid_snap_value);
+	
+	/* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
+	$x = round( ( $xRaw / ( $mapScale * 1 )), 0);
+	$y = round( ( $yRaw / ( $mapScale * 1 )), 0);
 
 	$scalename = wm_editor_sanitize_name(get_nfilter_request_var('param'));
 
@@ -553,8 +566,21 @@ function placeStamp($mapfile, $grid_snap_value) {
 
 	$map->context = 'editor';
 
-	$x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
-	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+	/* $x = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$y = snap(intval(get_nfilter_request_var('y')), $grid_snap_value); */
+	/* Divert x & y into temp vars @PANZOOM */
+	$xRaw = snap(intval(get_nfilter_request_var('x')), $grid_snap_value);
+	$yRaw = snap(intval(get_nfilter_request_var('y')), $grid_snap_value);
+	
+	/*Added by github.com/rigrace
+	 Should be the scale of the map in decimal
+	 @PANZOOM
+	 */
+	$mapScale = snap(round(floatval(get_nfilter_request_var('mapScale')), 3), $grid_snap_value);
+	
+	/* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
+	$x = round( ( $xRaw / ( $mapScale * 1 )), 0);
+	$y = round( ( $yRaw / ( $mapScale * 1 )), 0);
 
 	$map->ReadConfig($mapfile);
 
@@ -569,8 +595,21 @@ function viaLink($mapfile) {
 
 	$map->context = 'editor';
 
-	$x = intval(get_nfilter_request_var('x'));
-	$y = intval(get_nfilter_request_var('y'));
+	/* $x = intval(get_nfilter_request_var('x'));
+	$y = intval(get_nfilter_request_var('y')); */
+	/* Divert x & y into temp vars @PANZOOM */
+	$xRaw = intval(get_nfilter_request_var('x'));
+	$yRaw = intval(get_nfilter_request_var('y'));
+	
+	/*Added by github.com/rigrace
+	 Should be the scale of the map in decimal
+	 @PANZOOM
+	 */
+	$mapScale = round(floatval(get_nfilter_request_var('mapScale')), 3);
+	
+	/* Correct x & y per the scale (allways storing at full scale (1) @PANZOOM */
+	$x = round( ( $xRaw / ( $mapScale * 1 )), 0);
+	$y = round( ( $yRaw / ( $mapScale * 1 )), 0);
 
 	$link_name = wm_editor_sanitize_name(get_nfilter_request_var('link_name'));
 

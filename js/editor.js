@@ -239,7 +239,11 @@ function graphPicker() {
 				$('#node_hover').val('graph_image.php?local_graph_id=' + $('#' + id).val());
 				$('#node_infourl').val('graph_view.php?action=preview&reset=true&style=selective&graph_list=' + $('#' + id).val());
 			} else if (id == 'link_target_picker') {
-				$('#link_target').val($('#' + id).val());
+				if( $('#link_target_picker_addtype').is(':checked')) {
+					$('#link_target').val('gauge:'.concat($('#' + id).val(), ':int_status:int_status'));
+				} else {
+					$('#link_target').val($('#' + id).val());
+				}
 			}
 		});
 
